@@ -1,0 +1,44 @@
+
+# PYTHONPATH must include directory above plugin directory.
+#     Define either externally or here, then import plugin.
+
+
+# Path to plugin_prop.so
+objdir = '../plugin_prop'
+# Path to data directory
+datadir = 'data/'
+
+import sys
+sys.path.append(objdir)
+import prop
+
+sys.path.insert(0, './..')
+
+import plugin_fragment
+
+molecule {
+H         -1.52079        0.41536       -0.00000
+C          0.42217        0.40788        0.00000
+--
+C          1.62103        0.40017        0.00000
+H          2.61501        0.39378        0.00000
+symmetry c1
+}
+
+set {
+  basis cc-pVDZ
+  property_filepath 'data'
+  property_tasks ['ORBITALS']
+  d_convergence 0
+  property_orbitals [] #1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
+}
+
+set plugin_local {
+  print 3
+}
+
+energy('scf')
+energy('plugin_fragment')
+energy('prop')
+#plugin_local.exampleFN()
+
