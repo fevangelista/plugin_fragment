@@ -7,7 +7,7 @@
 
 using namespace boost;
 
-namespace psi{ namespace plugin_local {
+namespace psi{ namespace plugin_fragment {
 
 void localize_on_fragment(Options& options,boost::shared_ptr<Wavefunction> wfn)
 {
