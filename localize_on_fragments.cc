@@ -80,7 +80,7 @@ void localize_on_fragment(Options& options,boost::shared_ptr<Wavefunction> wfn)
     SharedMatrix Uo(new Matrix("Uo",nalpha,nalpha));
     SharedVector lo(new Vector("lo",nalpha));
     SAo->diagonalize(Uo,lo,descending);
-    lo->print();
+    // lo->print();
 
     int navir = nbf - nalpha;
     SharedMatrix SAv(new Matrix("SAv",navir,navir));
@@ -92,7 +92,7 @@ void localize_on_fragment(Options& options,boost::shared_ptr<Wavefunction> wfn)
     SharedMatrix Uv(new Matrix("Uv",navir,navir));
     SharedVector lv(new Vector("lv",navir));
     SAv->diagonalize(Uv,lv,descending);
-    lv->print();
+    // lv->print();
 
     SharedMatrix U(new Matrix("U",nbf,nbf));
     for (int i = 0; i < nalpha; ++i){
