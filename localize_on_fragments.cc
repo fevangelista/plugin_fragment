@@ -33,7 +33,7 @@ void localize_on_fragment(Options& options,boost::shared_ptr<Wavefunction> wfn)
     std::vector<int> glist;
     boost::shared_ptr<Molecule> frag = mol->extract_subsets(flist,glist);
     int frag_natom = frag->natom();
-    fprintf(outfile,"\n  Fragment contains %d atoms",frag->natom());
+    outfile->Printf("\n  Fragment contains %d atoms",frag->natom());
 
     // Form a copy of S_ao and zero the rows and columns that are not on this fragment
 //    max_a = min_a +
@@ -42,7 +42,7 @@ void localize_on_fragment(Options& options,boost::shared_ptr<Wavefunction> wfn)
     SharedMatrix S_f(S_ao->clone());
     for (int mu = 0; mu < nbf; mu++) {
         int A = basisset_->function_to_center(mu);
-        fprintf(outfile,"\n  Function %d is on atom %d",mu,A);
+        outfile->Printf("\n  Function %d is on atom %d",mu,A);
         if (A < frag_natom){
             nbfA += 1;
         }

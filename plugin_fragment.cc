@@ -37,13 +37,13 @@ PsiReturnType plugin_fragment(Options& options)
     // localize on atoms
 
     if (options.get_int("PRINT") > 0){
-        fprintf(outfile,"\n\n         ---------------------------------------------------------");
-        fprintf(outfile,"\n                            ORBITAL LOCALIZATION");
-        fprintf(outfile,"\n                        by Francesco A. Evangelista");
-        fprintf(outfile,"\n         ---------------------------------------------------------");
+        outfile->Printf("\n\n         ---------------------------------------------------------");
+        outfile->Printf("\n                            ORBITAL LOCALIZATION");
+        outfile->Printf("\n                        by Francesco A. Evangelista");
+        outfile->Printf("\n         ---------------------------------------------------------");
 
-        fprintf(outfile,"\n\n  ==> Details <==");
-        fprintf(outfile,"\n\n    Number of fragments: %d",nfragments);
+        outfile->Printf("\n\n  ==> Details <==");
+        outfile->Printf("\n\n    Number of fragments: %d",nfragments);
     }
 
     if (nfragments == 1){

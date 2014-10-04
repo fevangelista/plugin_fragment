@@ -4,7 +4,7 @@
 
 using namespace boost;
 
-namespace psi{ namespace plugin_local {
+namespace psi{ namespace plugin_fragment {
 
 void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 {
@@ -33,7 +33,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 //    std::vector<int> glist;
 //    boost::shared_ptr<Molecule> frag = mol->extract_subsets(flist,glist);
 //    int frag_natom = frag->natom();
-//    fprintf(outfile,"\n  Fragment contains %d atoms",frag->natom());
+//    outfile->Printf("\n  Fragment contains %d atoms",frag->natom());
 
 //    // Form a copy of S_ao and zero the rows and columns that are not on this fragment
 ////    max_a = min_a +
@@ -59,12 +59,12 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
             current_atom = A;
         }
         atom_bf[A] += 1;
-        fprintf(outfile,"\n  Function %d is on atom %d",mu,A);
+        outfile->Printf("\n  Function %d is on atom %d",mu,A);
     }
     atom_bf_end[natom-1] = nbf;
 
     for (int A = 0; A < natom; ++A){
-        fprintf(outfile,"\n  Atom %2d : functions %2d  [%2d->%2d]",A,atom_bf[A],atom_bf_begin[A],atom_bf_end[A]-1);
+        outfile->Printf("\n  Atom %2d : functions %2d  [%2d->%2d]",A,atom_bf[A],atom_bf_begin[A],atom_bf_end[A]-1);
     }
 
     // For now assume a closed-shell determinant
@@ -80,7 +80,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 
     for (int A = 0; A < natom; ++A){
 
-        fprintf(outfile,"\n\n  ==> Atom %d <==\n\n",A);
+        outfile->Printf("\n\n  ==> Atom %d <==\n\n",A);
         // Form an atomic overlap matrix
         int nbfA = atom_bf[A];
         SharedMatrix S_f(new Matrix("S_f",nbfA,nbfA));
@@ -162,13 +162,13 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 //        for (int i = 0; i < nocc; ++i){
 //            double lo = lo_atoms[A]->get(i);
 //            if (std::fabs(lo) > threshold){
-//                fprintf(outfile,"\n  Adding atomic localize occupied orbital %2d from atom %2d (%f)",i,A,lo);
+//                outfile->Printf("\n  Adding atomic localize occupied orbital %2d from atom %2d (%f)",i,A,lo);
 //                nloc_occ += 1;
 //                loc_occ.push_back(std::make_pair(A,i));
 //            }
 //        }
 //    }
-//    fprintf(outfile,"\n  Added a total of %d orbitals",nloc_occ);
+//    outfile->Printf("\n  Added a total of %d orbitals",nloc_occ);
 
 
     // Sort the orbitals according to the value of lambda_o
@@ -189,14 +189,14 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
         int A,i;
         // access the elements by unpacking them with std::tie ...
         std::tie(lo,A,i) = sorted_loc_occ[t];
-        fprintf(outfile,"\n %3d  %2d-%2d : %f",t+1,A,i,lo);
+        outfile->Printf("\n %3d  %2d-%2d : %f",t+1,A,i,lo);
         if (lo > threshold){
             nkeep += 1;
-            fprintf(outfile," --> keep");
+            outfile->Printf(" --> keep");
         }else{
         }
     }
-    fprintf(outfile,"\n Keeping %d MOs",nkeep);
+    outfile->Printf("\n Keeping %d MOs",nkeep);
 
     // Place the orbitals to keep in Cloc
     SharedMatrix Cloc(new Matrix("Cloc",nbf,nkeep));
@@ -253,7 +253,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 
     // Gram-Schmidt
     if(procedure == 1){
-        fprintf(outfile,"\n  Performing Schmidt orthogonalization");
+        outfile->Printf("\n  Performing Schmidt orthogonalization");
 //        SharedMatrix XX(S_ao->clone());
         SharedMatrix XX(V_ao->clone());
         XX->transform(Cloc);
@@ -271,7 +271,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
             std::vector<std::pair<double,int>> sorted_gs;
             for (int j = i; j < nkeep; ++j){
                 sorted_gs.push_back(std::make_pair(XX->get(j,j),j));
-                fprintf(outfile,"\n  XX %d -> %f",j,XX->get(j,j));
+                outfile->Printf("\n  XX %d -> %f",j,XX->get(j,j));
             }
             std::sort(sorted_gs.begin(),sorted_gs.end());
 //            std::reverse(sorted_gs.begin(),sorted_gs.end());
@@ -285,7 +285,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
             }
             norm = std::sqrt(norm);
 
-            fprintf(outfile,"\n  GS %d -> %d (norm = %f)",i,ii,norm);
+            outfile->Printf("\n  GS %d -> %d (norm = %f)",i,ii,norm);
             if (norm > gs_threshold){
                 // Normalize
                 for (int mu = 0; mu < nbf; ++mu){
@@ -364,7 +364,7 @@ void localize_on_atoms(Options& options, boost::shared_ptr<Wavefunction> wfn)
 //            rms += std::pow(c-oldC[i],2.0);
 //            oldC[i] = c;
 //        }
-//        fprintf(outfile,"\n %d -> %20.12f",cycle,std::sqrt(rms));
+//        outfile->Printf("\n %d -> %20.12f",cycle,std::sqrt(rms));
 //    }
 //    SharedMatrix Omega_inv(Omega->clone());
 //    Omega_inv->pseudoinverse(1.0e-6);
